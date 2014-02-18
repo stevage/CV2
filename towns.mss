@@ -4,14 +4,15 @@
   text-face-name:"Roboto Condensed Regular";
   text-fill:@townlabels;
   text-size:20;
-  [zoom < 9] { text-size:16;}
+  [zoom <= 10] { text-size:16;}
+  [zoom <= 7] { text-size:14;}
 
   text-name:'[name]';
   text-halo-radius:2;
   text-halo-fill:hsla(0,0%,100%,80%);
   text-placement-type:simple;
-  text-allow-overlap:true;
-  text-placements: "E,NE,SE,N,S,18,16,14,12";
+//  text-allow-overlap:true;
+  text-placements: "E,NE,SE,N,S,18,16,14,12,10,8";
 }
 
 #places_towns {
@@ -30,7 +31,7 @@
     [zoom >=9] { text-size: 16; }
     [zoom=8] { text-size: 12; }
     [zoom <= 7] { text-size:8;  }
-  //  text-allow-overlap:true;
+    text-allow-overlap:true;
     text-name:'[name]';
     text-halo-radius:1.5;
     text-placement-type:simple;
@@ -40,7 +41,8 @@
 }
 
 #places[place = 'village'][amenities >= 1][zoom >=8],
-#places[place='hamlet'][amenities >= 1][zoom >=8]  {
+#places[place='hamlet'][amenities >= 1][zoom >=8],
+#places[place='locality'][amenities >= 1][zoom >=13] {
   
   ::label[zoom >= 8] {
     text-face-name: 'Roboto Condensed Light';
@@ -53,6 +55,7 @@
     text-halo-radius:1;
     text-size:10;
     [zoom >= 14] { text-size:14; }
+    [place='locality'] { text-size:10; }
     text-dx: 4;
   }
   ::marker[zoom >8] {
@@ -128,7 +131,9 @@
   
 }
 
-#bikepathsplain[zoom >=10][highway='cycleway']  {
+#bikepathsplain[zoom >=10][highway='cycleway'],
+#bikepathsplain[zoom >=10][highway='bridleway'][bicycle='yes']
+{
   line-width:1;
   [zoom < 13] { line-width: 0.5; }
   line-color:@bikeroute;

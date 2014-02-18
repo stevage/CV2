@@ -16,7 +16,7 @@ Map {
   line-width:1.2;
   [zoom < 9] { line-width: 0.8;}
   line-color:gray;
-  [highway='motorway'][highway='trunk'] { line-color: black; }
+  [highway='motorway'],[highway='trunk'] { line-color: black; }
   [highway="unclassified"],[highway="road"] { 
     line-width: 0.8; 
     [zoom < 9] { line-width: 0.4; }
@@ -38,7 +38,8 @@ Map {
     line-width:0.5;
   }
 
-  ::label[zoom >= 10][highway != 'residential'] {
+  ::label[zoom >= 10][highway != 'residential'][highway != 'service'],
+  ::label[zoom >= 16] {
     text-face-name:'CartoGothic Std Book';
     text-size:12;
     text-name:'[name]';
@@ -53,6 +54,10 @@ Map {
     }
     [highway='primary'],[highway='secondary'],[highway='tertiary'] {
         text-size: 12;
+    }
+    [highway='residential'],[highway='service'] {
+      text-fill:#777;
+      text-size:10;
     }
   }
 }
@@ -95,12 +100,32 @@ Map {
     line-width:0.5; 
     line-color:hsla(220, 0.8, 80%,0.6);
   }
+  [zoom >= 14] {
+    text-face-name:'CartoGothic Std Book';
+    text-size:13;
+    text-name:'[name]';
+    text-placement:line;
+    text-fill:darken(@water,20%);
+    text-halo-radius:1;
+    text-halo-fill:lighten(@water,20%);
+    line-smooth:1.0;
+  }
 }
 #waterways[waterway="stream"],#waterways[waterway="drain"] {
   [zoom >= 8] {
     line-width:0.5;
     line-color:hsla(220, 0.8, 80%,0.5);
     line-smooth:0.8;
+  }
+  [zoom >= 15] {
+    line-width: 3;
+    text-face-name:'CartoGothic Std Book';
+    text-size:11;
+    text-name:'[name]';
+    text-placement:line;
+    text-fill:darken(@water,20%);
+    text-halo-radius:1;
+    text-halo-fill:white;
   }
 }
 
@@ -112,22 +137,36 @@ Map {
 
 
 #rail {
-  // physical rail
-/*  line-width:2;
-  [railway="preserved"]{ line-width: 0.5; }
-  line-color:hsl(140,80%,40%);
-  ::dots { 
-    line-width:2.5;
-    [railway="preserved"] { line-width: 1.0; }
-    line-color:hsl(140,80%,20%);
-    line-dasharray:4,4;
-  }
-  
-  */
   line-width:1;
-  [railway="preserved"]{ line-width: 0.5; }
   line-color:hsl(140,80%,40%);
-/*  ::dots { 
+  [railway="preserved"]{ 
+    line-width: 0.5; 
+    // represent preserved lines similar to passenger services
+    // assuming that they all have some kind of regular (if infrequent) service
+    ::altdashes {
+      line-width:2.5;
+      line-color:hsl(60,90%,80%);
+    }
+    ::dots {
+      line-width:2.5;
+      line-color:hsl(140,80%,20%);
+      line-dasharray:4,4;
+    }
+
+    ::label[zoom >= 10] {
+      text-face-name:'CartoGothic Std Book';
+      text-fill:hsl(140,70%,30%);
+      text-size:11;
+      [zoom >= 12] { text-size:12; }
+      text-name:'[name]';
+      text-placement:line;
+      text-allow-overlap:true;
+      text-halo-fill:white;
+      text-halo-radius:2;
+    }
+  }
+
+  /*  ::dots { 
     line-width:2.5;
     [railway="preserved"] { line-width: 1.0; }
     line-color:hsl(140,80%,20%);
@@ -137,9 +176,11 @@ Map {
  }
 
 #oldrail {
-  line-width:0.5;
-  line-color:hsl(140,40%,40%);
-  line-dasharray:6,2;
+  ::greendashes {
+    line-width:0.5;
+    line-color:hsl(140,40%,40%);
+    line-dasharray:6,2;
+  }
   ::label[zoom >= 10] {
     text-face-name:'CartoGothic Std Book';
     text-fill:hsl(140,40%,40%);
@@ -153,8 +194,12 @@ Map {
   }
 }
 
-
-#trains[route_name='Shepparton Line'] {
+/* Actual services */
+#trains {
+  ::carpet {
+    line-width:5;
+    line-color: white;
+  }
   line-width:2;
   line-color:hsl(140,80%,40%);
   ::dots { 
@@ -207,11 +252,18 @@ Map {
 
 
 #green {
-  polygon-fill:hsla(100,50%,60%,30%);
-//  line-color:hsla(100,50%,60%,60%);
+  polygon-fill:hsla(100,50%,90%,100%);
   line-width:0;
-  line-smooth:0.8;
+//  line-smooth:0.8;
   polygon-smooth:0.5;
+  [zoom >= 11] { 
+    polygon-fill:hsl(100,50%,95%);
+    line-width:0.5;
+    line-color:hsl(100,70%,90%);
+    line-smooth:0.2;
+    polygon-smooth:0.2;
+  }
+    
 }
 
 #waterpoly {
@@ -236,6 +288,17 @@ Map {
     text-halo-radius:1;*/
 }
 
+#stateboundaries {
+  line-width: 1;
+  line-color: #959;
+  [zoom >= 9] { line-dasharray:4,8; }
+}
 
 
 
+
+#walkingpaths[zoom >= 14] {
+  line-width:1;
+  line-dasharray:1,2;
+  line-color:hsl(110,90%,30%);
+}
